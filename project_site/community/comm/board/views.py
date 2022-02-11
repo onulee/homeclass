@@ -4,24 +4,48 @@ from django.db.models import Q, F
 from django.core.paginator import Paginator
 from member.models import Member
 from django.db.models import Max,Min,Avg 
-import requests
-from bs4 import BeautifulSoup
+import urllib # 한글인코딩
+import requests # 웹스크롤링
+import json
 
-def web1(request):
 
-    # 네이버 웹툰 검색
-    url = "https://comic.naver.com/webtoon/weekday"
-    headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"}
-    res = requests.get(url, headers=headers)
-    res.raise_for_status()     #에러시 종료
+#공공데이터
+def publicData(request):
+    nowpage = request.GET.get('nowpage',1)
+    m_serviceKey ='918RE13GA7OY7ZEmUzApgbOeAcQoZ%2FaHsXWcqPAKQ9YNNPj83KOstRMRIUrCFIAcm9qj2R6b7NFZjp%2FYsYzJLg%3D%3D'
+    url = 'http://api.visitkorea.or.kr/openapi/service/rest/PhotoGalleryService/galleryList?serviceKey={}&pageNo={}&numOfRows=10&MobileOS=ETC&MobileApp=AppTest&arrange=A&_type=json'.format(m_serviceKey,nowpage)
+    response = requests.get(url)
+    print("views response : ",response)
+    # response의 내용을 text변환
+    contents = response.text
+    # text를 json 타입으로 변경
+    json_ob = json.loads(contents)
+    # json데이터 중 필요한 데이터 가져오기
+    publicData = json_ob['response']['body']['items']['item']
+    print(" views bodyData : ",publicData)
+    context={'publicData':publicData}
+    return render(request,'publicData.html',context)
 
-    soup = BeautifulSoup(res.text,"lxml") #text을 lxml파싱해서 soup담음.
-    print(soup)                 #전체페이지 html코드 출력
-
+#공공데이터2
+def publicData2(request):
+    nowpage = request.GET.get('nowpage',1)
+    m_serviceKey ='918RE13GA7OY7ZEmUzApgbOeAcQoZ%2FaHsXWcqPAKQ9YNNPj83KOstRMRIUrCFIAcm9qj2R6b7NFZjp%2FYsYzJLg%3D%3D'
+    url = 'https://api.odcloud.kr/api/apnmOrg/v1/list?page={}&perPage=20&serviceKey={}'.format(nowpage,m_serviceKey)
+    # url에서 정보를 받아옴.
+    response = requests.get(url)
+    print("views response : ",response)
+    # response의 내용을 text변환
+    contents = response.text
+    # text를 json 타입으로 변경
+    json_ob = json.loads(contents)
+    # json데이터 중 필요한 데이터 가져오기
+    publicData = json_ob['data']
+    print(" views bodyData : ",publicData)
+    context={'publicData':publicData}
+    return render(request,'publicData2.html',context)
 
 # 게시판리스트
 def blist(request):
-    
     # 현재페이지 받음, 없을때 1 고정
     nowpage = int(request.GET.get('nowpage',1))  
     
@@ -73,29 +97,6 @@ def bview(request,b_no):
     qs.b_hit += 1
     qs.save()
     context={'board':qs}
-    
-    b_group = qs.b_group
-    print("b_group : ",b_group)
-    b_step = qs.b_step
-    # 모든 게시판 내용이 담겨있음.
-    # all_qs = Fboard.objects.all().order_by('-b_group','b_step')
-    # print("views bview : ",all_qs)
-    
-    pre_qs = Fboard.objects.filter(b_group=b_group,b_step__gt=b_step)
-    if pre_qs:
-        context['pre_board'] = pre_qs[0]
-        print(" pre_qs b_group1 : ",pre_qs[0].b_group)
-    else:
-        pre_qs = Fboard.objects.filter(b_group__lt=b_group).last()
-        
-        context['pre_board'] = pre_qs
-        if pre_qs:
-            print(" pre_qs b_group2 : ",pre_qs.b_group)
-        
-    print("views pre_board : ",context['pre_board'])         
-    if pre_qs:
-        print("views pre_board bgroup : ",context['pre_board'].b_group)         
-    
     return render(request,'bview.html',context)
 
 # 수정페이지
@@ -188,7 +189,5 @@ def breplyOk(request):
     qs.save()
     # Fboard.objects.create(b_id=id,b_title=title,b_content=content)
     return redirect('board:blist')
-
-
     
     
