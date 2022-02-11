@@ -1,0 +1,14 @@
+python manage.py makemigrations
+
+python manage.py migrate
+
+python -u manage.py runserver 0.0.0.0:8000
+
+C:\pyFolder\js_work\project_site\pj0131\ex01
+
+C:\pyFolder\js_work\project_site\pj0202\pjt01
+
+
+[ git push 확인 ]
+git push origin master -f
+
