@@ -1,6 +1,7 @@
 import csv
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
 
 url = "https://finance.naver.com/sise/sise_market_sum.naver?&page="
 headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"}
@@ -25,9 +26,17 @@ for page in range(1,5):
         columns =row.find_all("td")
         if len(columns) <= 1:
             continue
-        data = [column.get_text().strip() for column in columns]
+        # data = [column.get_text().strip() for column in columns]
+        data=[]
+        for column in columns:
+            # data = column.get_text().strip()
+            data.append(column.get_text().strip())
+           
+            
         # print(data)
         writer.writerow(data)
+        
+    
     
     
     
