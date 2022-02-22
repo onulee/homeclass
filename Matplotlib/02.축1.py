@@ -11,7 +11,7 @@ plt.plot(x,y)
 plt.xlabel('X축',color='red',loc='right')
  # Y선 설명, 생상 들어감, 위치 : top,center,bottom
 plt.ylabel('Y축',color='#00aa00',loc='top') 
-# 그래프 x,y표시 간격
+# 그래프 x,y표시 간격 
 plt.xticks([1,2,3])
 plt.yticks([3,6,9,12])
 
