@@ -6,7 +6,7 @@ matplotlib.rcParams['font.family'] = 'Malgun Gothic' #windows
 # matplotlib.rcParams['font.family'] = 'AppleGothic' #Mac인 경우
 matplotlib.rcParams['font.size'] = 15  #글자크기 
 # 한글 폰트 사용시, 마이너스 글자가 깨지는 현상을 해결
-matplotlib.rcParams['axes.unicode_minus'] = False  
+matplotlib.rcParams['axes.unicode_minus'] = False #마이너스 글자 깨짐 해결  
 
 # -1 -가 깨짐. 환경설정을 해줘야 함.
 plt.plot([-1,0,1],[-5,-1,2])

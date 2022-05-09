@@ -7,6 +7,18 @@ from django.db.models import Max,Min,Avg
 import urllib # 한글인코딩
 import requests # 웹스크롤링
 import json
+import cx_Oracle as ora
+import pandas as pd
+
+# db연결함수로 정의
+def connections():
+    try:
+        conn= ora.connect('system/1234@localhost:1521/xe')
+        # cursor = conn.cursor()
+    except Exception as e:
+        msg="예외발생"
+        print(msg)
+    return conn
 
 
 #공공데이터
@@ -48,6 +60,10 @@ def publicData2(request):
 def blist(request):
     # 현재페이지 받음, 없을때 1 고정
     nowpage = int(request.GET.get('nowpage',1))  
+    conn = connections()
+    query ='select * from score' 
+    df = pd.read_sql_query(query,conn)
+    print(df)
     
     if request.method == 'GET':
         

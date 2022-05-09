@@ -84,7 +84,16 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.oracle',
+#         'NAME': 'XE',
+#         'USER': 'system',
+#         'PASSWORD': '1234',
+#         'HOST': 'localhost',
+#         'PORT': '1521',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

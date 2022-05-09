@@ -1,7 +1,4 @@
 import pandas as pd
-import sqlite3 as sq3
-
-con = sq3.connect('./pddata.db')
 
 data = {
     '이름' : ['강나래', '강태원', '강호림', '김수찬', '김재욱', '박동현', '박혜정', '승근열'],
@@ -15,6 +12,36 @@ data = {
     'SW특기' : ['Python', 'Java', 'Javascript', '', '', 'C', 'PYTHON', 'C#']
 }
 
-df = pd.DataFrame(data,index=['1번','2번','3번','4번','5번','6번','7번','8번'],columns=['이름','키','학교'])
+df = pd.DataFrame(data)
+# print(df)
 
-print(df )
+import random
+df['요일'] = 1
+for i in range(8):
+    df.loc[i,'요일'] = random.randint(1,6)
+
+def change(x):
+    if x == 0 :
+        return '월'
+    elif x == 1 :
+        return '화'
+    elif x == 2 :
+        return '수'
+    elif x == 3 :
+        return '목'
+    elif x == 4 :
+        return '금'
+    elif x == 5 :
+        return '토'
+    else :
+        return '일'
+
+df['요일'] = df['요일'].apply(change)
+
+print(df)
+print(df['요일'])
+# print(df.iloc[0][4])
+
+
+# df['요일'] = random.randint(1,6)
+# print(df)
