@@ -1,4 +1,5 @@
 from sklearn import svm
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from scipy.special import expit
@@ -34,6 +35,7 @@ ss.fit(train_data)
 train_scaled = ss.transform(train_data)
 test_scaled = ss.transform(test_data)
 
+forest = RandomForestClassifier(n_estimators=100)
 # 로지스틱 회귀 사용,  확률형태로 구분하기 쉽게 변경
 lr = LogisticRegression(C=20)
 lr.fit(train_scaled,train_label)
@@ -50,8 +52,8 @@ print("정확도2 : ",score2)
 # print(lr.coef_,lr.intercept_)
 # [[-0.4037798  -0.57620209 -0.66280298 -1.01290277 -0.73168947]] [-2.16155132]
 
-decisions = lr.decision_function(train_scaled[:5])
-print(np.round(decisions, decimals=2))
+# decisions = lr.decision_function(train_scaled[:5])
+# print(np.round(decisions, decimals=2))
 
-proba = softmax(decisions, axis=1)
-print(np.round(proba, decimals=3))
+# proba = softmax(decisions, axis=1)
+# print(np.round(proba, decimals=3))

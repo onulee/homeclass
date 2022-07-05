@@ -28,6 +28,8 @@ print(wine.describe()) # 전반적인 정보확인
 data = wine[['alcohol', 'sugar', 'pH']].to_numpy()
 target = wine['class'].to_numpy()
 
+print(wine)
+
 # 3. train,test데이터 분리
 train_data, test_data, train_label, test_label = train_test_split(
     data, target, test_size=0.2, random_state=42)
@@ -84,7 +86,7 @@ test_scaled = ss.transform(test_data)
 # plt.plot(np.log10(clists),test_score)
 # plt.show()
 
-lr = LogisticRegression(C=0.1)
+lr = LogisticRegression(C=0.1,max_iter=100)
 lr.fit(train_scaled, train_label)
 
 print(lr.score(train_scaled, train_label))
