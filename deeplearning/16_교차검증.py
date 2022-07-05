@@ -1,4 +1,4 @@
-from sklearn.model_selection import cross_validate
+from sklearn.model_selection import StratifiedKFold, cross_validate
 from sklearn.linear_model import LogisticRegression, SGDClassifier 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split # train,test데이터분리
@@ -17,18 +17,28 @@ label = wine['class'].to_numpy()
 train_data, test_data, train_label, test_lebel = train_test_split(
     data, label, test_size=0.2, random_state=42)
 
-# 데이터분리 - sub_data,val_data
-sub_data, val_data, sub_label, val_label = train_test_split(
-    train_data, train_label, test_size=0.2, random_state=42)
-
-print(sub_data.shape, sub_label.shape)
-
-# 알고리즈 선택
+# 알고리즘 선택
 dt = DecisionTreeClassifier(random_state=42)
-# 훈련
-dt.fit(sub_data, sub_label)
-#정확도
-print(dt.score(sub_data, sub_label))
-print(dt.score(val_data, val_label))
+
+# 검증세트를 2번 나누지 않음.
+# 교차검증 - 5파트로 나눠서 검증진행
+scores = cross_validate(dt, train_data, train_label)
+print(scores) # fit_time,score_time,test_score
+
+# # 교차검증 score 평균
+print(np.mean(scores['test_score']))  # 0.85530021470348
+
+# # StratifiedKFold()를 사용하여, 나누는 것을 상세하게 제어
+scores = cross_validate(dt, train_data, train_label, cv=StratifiedKFold())
+print(np.mean(scores['test_score']))
+
+# n_splits 10개 폴드, shuffle 고르게 섞음
+splitter = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
+scores = cross_validate(dt, train_data, train_label, cv=splitter)
+print(np.mean(scores['test_score']))
+
+
+
+
 
 
