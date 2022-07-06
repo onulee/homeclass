@@ -86,19 +86,19 @@ test_scaled = ss.transform(test_data)
 # plt.plot(np.log10(clists),test_score)
 # plt.show()
 
-lr = LogisticRegression(C=0.1,max_iter=100)
-lr.fit(train_scaled, train_label)
+# lr = LogisticRegression(C=0.1,max_iter=100)
+# lr.fit(train_scaled, train_label)
 
-print(lr.score(train_scaled, train_label))
-print(lr.score(test_scaled, test_label))
+# print(lr.score(train_scaled, train_label))
+# print(lr.score(test_scaled, test_label))
 
 # # 기울기(가중치), Y절편
 # print(lr.coef_, lr.intercept_)
 
 # 5. 트리알고니즘 적용
-# max_depth=3, depth를 3까지만 가능
-# dt = DecisionTreeClassifier(random_state=42)
-# dt.fit(train_scaled,train_label)
+#max_depth=3, depth를 3까지만 가능
+dt = DecisionTreeClassifier(random_state=42)
+dt.fit(train_scaled,train_label)
 
 # # 그래프 그리기
 # plt.figure(figsize=(10,7))
@@ -107,7 +107,7 @@ print(lr.score(test_scaled, test_label))
 # plt.show()
 
 # # 특성 중요도 - 특성중에 어떤것이 가장 영향이 큰지를 알수 있음.
-# print(dt.feature_importances_)
+print(dt.feature_importances_)
 
 # print(dt.score(train_scaled,train_label))
 # print(dt.score(test_scaled,test_label))
