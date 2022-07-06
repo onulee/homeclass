@@ -170,31 +170,57 @@ show_cols = ['win', 'lose', 'save', 'hold', 'blon', 'match', 'start',
              'inning', 'strike3', 'ball4', 'homerun', 'BABIP', 'LOB', 
              'ERA', 'RA9-WAR', 'FIP', 'kFIP', 'WAR', '2017']
 
+#--------------------------------------------------------- 
 # corr 행렬 히트맵을 시각화합니다.
-plt.rc('font', family='NanumGothicOTF')
-sns.set(font_scale=1.5)
-hm = sns.heatmap(corr.values,
-            cbar=True,
-            annot=True, 
-            square=True,
-            fmt='.2f',
-            annot_kws={'size': 15},
-            yticklabels=show_cols,
-            xticklabels=show_cols)
+# hm = sns.heatmap(corr.values,
+#             cbar=True,
+#             annot=True, 
+#             square=True,
+#             fmt='.2f',
+#             annot_kws={'size': 15},
+#             yticklabels=show_cols,
+#             xticklabels=show_cols)
 
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
 
 # [회귀분석 예측 성능을 높이기 위한 방법 : 다중공선성 확인]
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
-# 피처마다의 VIF 계수를 출력합니다.
+# 피처마다의 VIF 계수를 출력.
 vif = pd.DataFrame()
 vif["VIF Factor"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
 vif["features"] = X.columns
 print(vif.round(1))
 
+##################################################
+#  분석 결과의 시각화
+# 2018년 연봉을 예측하여 데이터프레임의 column으로 생성.
+# X = picher_df[['FIP', 'WAR', '볼넷/9', '삼진/9', '연봉(2017)']]
+X = picher_df[picher_df.columns.difference(['선수명', 'y'])]
+predict_2018_salary = lr.predict(X)
+picher_df['예측연봉(2018)'] = pd.Series(predict_2018_salary)
 
+##################################################
+# 원래의 데이터 프레임을 다시 로드합니다.
+picher = pd.read_csv(picher_file_path)
+picher = picher[['선수명', '연봉(2017)']]
 
+# 원래의 데이터 프레임에 2018년 연봉 정보를 합칩니다.
+result_df = picher_df.sort_values(by=['y'], ascending=False)
+result_df.drop(['연봉(2017)'], axis=1, inplace=True, errors='ignore')
+result_df = result_df.merge(picher, on=['선수명'], how='left')
+result_df = result_df[['선수명', 'y', '예측연봉(2018)', '연봉(2017)']]
+result_df.columns = ['선수명', '실제연봉(2018)', '예측연봉(2018)', '작년연봉(2017)']
+
+# 재계약하여 연봉이 변화한 선수만을 대상으로 관찰합니다.
+result_df = result_df[result_df['작년연봉(2017)'] != result_df['실제연봉(2018)']]
+result_df = result_df.reset_index()
+result_df = result_df.iloc[:10, :]
+print(result_df.head(10))
+
+# 선수별 연봉 정보(작년 연봉, 예측 연봉, 실제 연봉)를 bar 그래프로 출력합니다.
+result_df.plot(x='선수명', y=['작년연봉(2017)', '예측연봉(2018)', '실제연봉(2018)'], kind="bar")
+plt.show()
 
 
