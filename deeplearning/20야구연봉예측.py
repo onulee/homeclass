@@ -24,14 +24,14 @@ print(picher.head())
 # 연봉(2018)  연봉(2017)
 
 # 컬럼출력
-print(picher.columns)
+# print(picher.columns)
 
 # df사이즈 출력
 print(picher.shape)
 # (152, 22)
 
 # 연봉에 대한 정보 - 개수,평균,표준편차,최소값,최대값
-print(picher['연봉(2018)'].describe())
+# print(picher['연봉(2018)'].describe())
 
 
 #--------------------------------------------------------- 
@@ -95,7 +95,7 @@ picher_df = standard_scaling(picher, scale_columns)
 
 # # 컬럼명 변경 - label값의 컬럼명 변경
 picher_df = picher_df.rename(columns={'연봉(2018)': 'y'})
-print(picher_df.head(5))
+# print(picher_df.head(5))
 
 # [피처들의 단위 맞춰주기 : one-hot-encoding]
 # 데이터는 모두 정수 또는 실수 숫자여야 함. - 팀명은 글자이기에 000010000
@@ -106,7 +106,7 @@ team_encoding = pd.get_dummies(picher_df['팀명'])
 picher_df = picher_df.drop('팀명', axis=1)  # 팀명컬럼 삭제
 picher_df = picher_df.join(team_encoding) # 
 # 상위5개 출력
-print(team_encoding.head(5))
+# print(team_encoding.head(5))
 
 # # 피처 상위 5개 출력
 # print(picher_df.head())
@@ -135,7 +135,7 @@ print(model.score(X_test, y_test)) # test R2 score를 출력  # score : 0.886017
 print("-"*50)
 
 # 컬럼출력
-print(picher_df.columns)
+# print(picher_df.columns)
 
 
 # -------------------------------------------------------------
@@ -203,17 +203,17 @@ show_cols = ['win', 'lose', 'save', 'hold', 'blon', 'match', 'start',
 
 #--------------------------------------------------------- 
 # corr 행렬 히트맵을 시각화합니다.
-hm = sns.heatmap(corr.values,
-            cbar=True,
-            annot=True, 
-            square=True,
-            fmt='.2f',
-            annot_kws={'size': 15},
-            yticklabels=show_cols,
-            xticklabels=show_cols)
+# hm = sns.heatmap(corr.values,
+#             cbar=True,
+#             annot=True, 
+#             square=True,
+#             fmt='.2f',
+#             annot_kws={'size': 15},
+#             yticklabels=show_cols,
+#             xticklabels=show_cols)
 
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
 
 # [회귀분석 예측 성능을 높이기 위한 방법 : 다중공선성 확인]
 # 회귀모델에 영향이 높은 컬럼들을 확인해서 제거
@@ -225,7 +225,7 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 vif = pd.DataFrame()
 vif["VIF Factor"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
 vif["features"] = X.columns
-print(vif.round(1))
+# print(vif.round(1))
 
 
 ##################################################
@@ -243,24 +243,24 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 lr = LinearRegression()
 model = lr.fit(X_train, y_train)
 
-# 결과를 출력합니다.
+# # 결과를 출력합니다.
 print(model.score(X_train, y_train)) # train R2 score를 출력합니다.
 print(model.score(X_test, y_test)) # test R2 score를 출력합니다.
 
-# 회귀 분석 모델을 평가합니다.
-y_predictions = lr.predict(X_train)
-print(sqrt(mean_squared_error(y_train, y_predictions))) # train RMSE score를 출력합니다.
-y_predictions = lr.predict(X_test)
-print(sqrt(mean_squared_error(y_test, y_predictions))) # test RMSE score를 출력합니다.
+# # # 회귀 분석 모델을 평가합니다.
+# # y_predictions = lr.predict(X_train)
+# # print(sqrt(mean_squared_error(y_train, y_predictions))) # train RMSE score를 출력합니다.
+# # y_predictions = lr.predict(X_test)
+# # print(sqrt(mean_squared_error(y_test, y_predictions))) # test RMSE score를 출력합니다.
 
-# 피처마다의 VIF 계수를 출력합니다.
-X = picher_df[['FIP', 'WAR', '볼넷/9', '삼진/9', '연봉(2017)']]
-vif = pd.DataFrame()
-vif["VIF Factor"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
-vif["features"] = X.columns
+# # # 피처마다의 VIF 계수를 출력합니다.
+# # X = picher_df[['FIP', 'WAR', '볼넷/9', '삼진/9', '연봉(2017)']]
+# # vif = pd.DataFrame()
+# # vif["VIF Factor"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+# # vif["features"] = X.columns
 
-# 10을 넘는 vif가 없음. 고르게 영향을 미치고 있다고 판단
-print(vif.round(1))
+# # # 10을 넘는 vif가 없음. 고르게 영향을 미치고 있다고 판단
+# # print(vif.round(1))
 
 
 #################################################
@@ -270,26 +270,28 @@ print(vif.round(1))
 X = picher_df[['FIP', 'WAR', '볼넷/9', '삼진/9', '연봉(2017)']]
 predict_2018_salary = lr.predict(X)
 picher_df['예측연봉(2018)'] = pd.Series(predict_2018_salary)
+print(picher_df['예측연봉(2018)'])
 
-# 원래의 데이터 프레임을 다시 로드합니다.
-picher = pd.read_csv(picher_file_path)
-picher = picher[['선수명', '연봉(2017)']]
+# # print(picher_df['예측연봉(2018)'])
+# # # 원래의 데이터 프레임을 다시 로드합니다.
+# # picher = pd.read_csv(picher_file_path)
+# # picher = picher[['선수명', '연봉(2017)']]
 
-# 원래의 데이터 프레임에 2018년 연봉 정보를 합칩니다.
-result_df = picher_df.sort_values(by=['y'], ascending=False)
-result_df.drop(['연봉(2017)'], axis=1, inplace=True, errors='ignore')
-result_df = result_df.merge(picher, on=['선수명'], how='left')
-result_df = result_df[['선수명', 'y', '예측연봉(2018)', '연봉(2017)']]
-result_df.columns = ['선수명', '실제연봉(2018)', '예측연봉(2018)', '작년연봉(2017)']
+# # # 원래의 데이터 프레임에 2018년 연봉 정보를 합칩니다.
+# # # result_df = picher_df.sort_values(by=['y'], ascending=False)
+# # # result_df.drop(['연봉(2017)'], axis=1, inplace=True, errors='ignore')
+# # # result_df = result_df.merge(picher, on=['선수명'], how='left')
+# # # result_df = result_df[['선수명', 'y', '예측연봉(2018)', '연봉(2017)']]
+# # # result_df.columns = ['선수명', '실제연봉(2018)', '예측연봉(2018)', '작년연봉(2017)']
 
-# # 재계약하여 연봉이 변화한 선수만을 대상으로 관찰합니다.
-result_df = result_df[result_df['작년연봉(2017)'] != result_df['실제연봉(2018)']]
-result_df = result_df.reset_index()
-result_df = result_df.iloc[:10, :]
-print(result_df.head(10))
+# # # # 재계약하여 연봉이 변화한 선수만을 대상으로 관찰합니다.
+# # # result_df = result_df[result_df['작년연봉(2017)'] != result_df['실제연봉(2018)']]
+# # # result_df = result_df.reset_index()
+# # # result_df = result_df.iloc[:10, :]
+# # # print(result_df.head(10))
 
-# 선수별 연봉 정보(작년 연봉, 예측 연봉, 실제 연봉)를 bar 그래프로 출력합니다.
-result_df.plot(x='선수명', y=['작년연봉(2017)', '예측연봉(2018)', '실제연봉(2018)'], kind="bar")
-plt.show()
+# # # 선수별 연봉 정보(작년 연봉, 예측 연봉, 실제 연봉)를 bar 그래프로 출력합니다.
+# # # result_df.plot(x='선수명', y=['작년연봉(2017)', '예측연봉(2018)', '실제연봉(2018)'], kind="bar")
+# # # plt.show()
 
 
