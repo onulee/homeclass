@@ -18,7 +18,7 @@ import statsmodels.api as sm
 
 
 # 1. 데이터 불러오기
-file_path = 'deeplearning//market-price.csv'
+file_path = 'deeplearning/market-price.csv'
 bitcoin_df = pd.read_csv(file_path, names = ['day', 'price'])
 
 print(bitcoin_df.shape)
