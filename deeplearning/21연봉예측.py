@@ -10,7 +10,6 @@ from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 # 한글설정
 matplotlib.rcParams['font.family'] = 'Malgun Gothic'
-# matplotlib.rcParams['font.family'] = 'Apple Gothic' # apple사용시
 matplotlib.rcParams['font.size'] = 15 # 상단제목 글자 15크기 변환
 matplotlib.rcParams['axes.unicode_minus']=False # 눈금 -표시 처리
 
@@ -31,13 +30,13 @@ picher = pd.read_csv(file_path)
 
 # --------------------------------------------------
 # 그래프 출력
-# plt.scatter(picher['선수명'],picher['연봉(2018)'])
+# plt.scatter(picher['선수명'][:10],picher['연봉(2018)'][:10])
 # plt.show()
-# 히스토그램 그래프, bins: 그래프100개
+# # 히스토그램 그래프, bins: 그래프100개
 # plt.hist(picher['연봉(2018)'],bins=100)
 # plt.show()
-# picher.boxplot(column=['연봉(2018)'])
-# plt.show()
+picher.boxplot(column=['연봉(2018)'])
+plt.show()
 # --------------------------------------------------
 
 # 데이터 전처리 - 정규화,표준화작업이 필요
@@ -122,27 +121,30 @@ print(lr.score(test_data,test_label))
 
 # picher에서 컬럼의 영향력 파악분석 - 20개 컬럼리스트
 corr = picher_df[scale_columns].corr(method='pearson')
-# show_cols = ['win','lose','save','hold','blon','match','start',
-#              'inning','strike3','ball4','homerun','babip','lob',
-#              'era','ra9-war','fip','kfip','war','2017']
+show_cols = ['win','lose','save','hold','blon','match','start',
+             'inning','strike3','ball4','homerun','babip','lob',
+             'era','ra9-war','fip','kfip','war','2017']
 
-# hm = sns.heatmap(corr.values,
-#                  cbar=True,
-#                  annot=True,
-#                  square=True,
-#                  fmt='.2f',
-#                  annot_kws={'size':15},
-#                  yticklabels=show_cols,
-#                  xticklabels=show_cols)
-# plt.tight_layout()
-# plt.show()
+hm = sns.heatmap(corr.values,
+                 cbar=True,
+                 annot=True,
+                 square=True,
+                 fmt='.2f',
+                 annot_kws={'size':15},
+                 yticklabels=show_cols,
+                 xticklabels=show_cols)
+plt.tight_layout()
+plt.show()
 
 
 # 첫번째컬럼:vif, 두번째컬럼:컬럼명 출력
 vif = pd.DataFrame()
+print("-"*50)
+print(vif)
+print("-"*50)
 vif['VIF factor'] = [variance_inflation_factor(data.values,i) for i in range(data.shape[1])]
 vif['features'] = data.columns
-# print(vif.round(1))
+print(vif.round(1))
 
 # -------------------------------------------
 # 너무 영향력이 높거나, 너무 낮은것을 파악해서
