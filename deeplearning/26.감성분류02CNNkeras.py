@@ -7,6 +7,7 @@ from konlpy.tag import Okt
 import matplotlib
 matplotlib.rcParams['axes.unicode_minus'] = False
 
+# 영화리뷰 감성분류 - CNN사용
 # https://wonhwa.tistory.com/35
 #트레인 파일 불러오기 - delimiter:분리표시, quoting : 3개까지 묶기 
 train_data = pd.read_csv('deeplearning/ratings_train.txt',header = 0, delimiter = '\t', quoting=3)

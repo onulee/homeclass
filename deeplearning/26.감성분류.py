@@ -7,6 +7,7 @@ import warnings
 warnings.filterwarnings("ignore")
 import re
 
+# 감성분류 - 로지스틱회귀 사용
 # 1. 데이터 불러오기
 df = pd.read_csv("deeplearning/review_data.csv")
 print(df)
