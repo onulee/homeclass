@@ -12,7 +12,6 @@ def text_cleaning(text):
     return result
 
 
-
 result = text_cleaning(book)
 
 print(book)
