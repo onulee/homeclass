@@ -1,11 +1,11 @@
 import codecs
 from bs4 import BeautifulSoup
 import urllib.request
-from konlpy.tag import Twitter
+from konlpy.tag import Okt
 import os, re, json, random
 dict_file = "chatbot-data.json"
 dic = {}
-twitter = Twitter()
+okt = Okt()
 
 # 딕셔너리에 단어 등록하기 --- (※1)
 def register_dic(words):
@@ -74,7 +74,7 @@ def word_choice(sel):
 def make_reply(text):
     # 단어 학습 시키기
     if not text[-1] in [".", "?"]: text += "."
-    words = twitter.pos(text)
+    words = okt.pos(text)
     register_dic(words)
     # 사전에 단어가 있다면 그것을 기반으로 문장 만들기
     for word in words:
