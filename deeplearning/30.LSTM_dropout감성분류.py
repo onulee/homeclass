@@ -109,8 +109,8 @@ checkpoint_cb = keras.callbacks.ModelCheckpoint('best-simplernn-model.h5',
 early_stopping_cb = keras.callbacks.EarlyStopping(patience=3,
                                                   restore_best_weights=True)
 
-history = model.fit(train_oh, train_target, epochs=100, batch_size=64,
-                    validation_data=(val_oh, val_target),
+history = model.fit(train_seq, train_target, epochs=100, batch_size=64,
+                    validation_data=(train_seq, val_target),
                     callbacks=[checkpoint_cb, early_stopping_cb])
 
 # 그래프 그리기
@@ -122,7 +122,7 @@ plt.legend(['train', 'val'])
 plt.show()
 
 # 6. 정확도
-score = model.evaluate(val_oh, val_target)
+score = model.evaluate(val_seq, val_target)
 print('loss=', score[0])
 print('accuracy=', score[1])
 

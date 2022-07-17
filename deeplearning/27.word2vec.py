@@ -45,9 +45,16 @@ for sentence in train_data['document']:
     temp_X = [word for word in temp_X if not word in stopwords] # 불용어 제거
     tokenized_data.append(temp_X)
     
+# https://wikidocs.net/50739    
 # Word2Vec 훈련- 리스트에 리스트에 담김
 from gensim.models import Word2Vec
 model = Word2Vec(sentences = tokenized_data, vector_size = 100, window = 5, min_count = 5, workers = 4, sg = 0)
 
+# word2vec 모델 저장
+model.save('model_w2v')
+model = Word2Vec.load('model_w2v')  
+
+
+# model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
 print(model.wv.most_similar("때"))
 
