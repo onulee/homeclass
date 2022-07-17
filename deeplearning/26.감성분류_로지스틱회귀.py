@@ -28,7 +28,8 @@ del df['review']
 df = df[df['ko_text'].str.len() > 0]
 df.head()
 
-
+#------------------------------------------------------------------
+# 형태소 분석
 from konlpy.tag import Okt
 
 # konlpy라이브러리로 텍스트 데이터에서 형태소를 추출합니다.
@@ -42,11 +43,16 @@ def get_pos(x):
 result = get_pos(df['ko_text'].values[0])
 print(result)
 
+# 형태소를 벡터화
 from sklearn.feature_extraction.text import CountVectorizer
 
 # 형태소를 벡터 형태의 학습 데이터셋(X 데이터)으로 변환합니다.
 index_vectorizer = CountVectorizer(tokenizer = lambda x: get_pos(x))
 X = index_vectorizer.fit_transform(df['ko_text'].tolist())
+
+
+
+
 
 from sklearn.feature_extraction.text import TfidfTransformer
 
