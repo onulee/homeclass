@@ -8,11 +8,12 @@ warnings.filterwarnings("ignore")
 import re
 
 # 감성분류 - 로지스틱회귀 사용
-# 1. 데이터 불러오기
+# 1. 데이터 불러오기 - 강남역 맛집
 df = pd.read_csv("deeplearning/review_data.csv")
 print(df)
 
-
+# -------------------------------------------------------------
+# 데이터 전처리 - 한글만, 1개 글자 제외
 # 텍스트 정제 함수 : 한글 이외의 문자는 전부 제거
 def text_cleaning(text):
     # 한글의 정규표현식으로 한글만 추출합니다.
