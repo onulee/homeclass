@@ -82,6 +82,7 @@ from tensorflow import keras
 
 model = keras.Sequential()
 #  단어를 실수 벡터로 인코딩, 단어와 단어사이 의미 부여
+#  단어가 2000개, 임베딩 벡터 128, 500 숫자가 정해져 있지 않음.
 model.add(keras.layers.Embedding(500, 16, input_length=100))
 # 기본 RNN ( 뉴런 8개, 길이:100, 원핫인코딩: 500 : 단어 총 500개  ) 
 model.add(keras.layers.SimpleRNN(8, input_shape=(100, 500)))
